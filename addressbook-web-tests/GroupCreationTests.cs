@@ -96,7 +96,7 @@ namespace WebAddressbookTests
         }
 
         
-        public void OpenHomePage()
+        private void OpenHomePage()
         {
             driver.Navigate().GoToUrl(baseURL + "/addressbook/");
         }
