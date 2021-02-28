@@ -17,19 +17,19 @@ namespace WebAddressbookTests
 
         }
 
-        public GroupHelper Remove(int v)
+        public GroupHelper Remove()
         {
             manager.Navigator.GoToGroupsPage();
-            SelectGroup(v);
+            SelectGroup();
             RemoveGroup();
             ReturnToGroupsPage();
             return this;
         }
 
-        public GroupHelper Modify(int v, GroupData newGroup)
+        public GroupHelper Modify(GroupData newGroup)
         {
             manager.Navigator.GoToGroupsPage();
-            SelectGroup(v);
+            SelectGroup();
             InitGroupModification();
             FillGroupForm(newGroup);
             SubmitGroupModification();
@@ -50,13 +50,26 @@ namespace WebAddressbookTests
         }
         public GroupHelper RemoveGroup()
         {
+            if (driver.FindElement(By.XPath("(//input[@name='selected[]'])")).Selected)
+            {
+                driver.FindElement(By.Name("delete")).Click();
+                return this;
+            }
+            SelectGroup();
             driver.FindElement(By.Name("delete")).Click();
             return this;
         }
 
-        public GroupHelper SelectGroup(int index)
+        public GroupHelper SelectGroup()
         {
-            driver.FindElement(By.XPath("(//input[@name='selected[]'])[" + index + "]")).Click();
+            if (IsElementPresent(By.XPath("(//input[@name='selected[]'])")))
+            {
+                driver.FindElement(By.XPath("(//input[@name='selected[]'])")).Click();
+                return this;
+            }
+            GroupData group = new GroupData("newgroup", "header", "footer");
+            Create(group);
+            driver.FindElement(By.XPath("(//input[@name='selected[]'])")).Click();
             return this;
         }
 
@@ -96,6 +109,12 @@ namespace WebAddressbookTests
 
         public GroupHelper InitGroupModification()
         {
+            if (driver.FindElement(By.XPath("(//input[@name='selected[]'])")).Selected)
+            {
+                driver.FindElement(By.Name("edit")).Click();
+                return this;
+            }
+            SelectGroup();
             driver.FindElement(By.Name("edit")).Click();
             return this; 
         }

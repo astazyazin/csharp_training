@@ -16,7 +16,7 @@ namespace WebAddressbookTests
         {
             GroupData newGroup = new GroupData("newgroup1",null,null);
             
-            app.Groups.Modify(1, newGroup);
+            app.Groups.Modify(newGroup);
         }
     }
 }

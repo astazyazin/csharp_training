@@ -31,11 +31,7 @@ namespace WebAddressbookTests
             return this;
         }
 
-        public ContactHelper ReturnToHomePage()
-        {
-            driver.FindElement(By.LinkText("home page")).Click();
-            return this;
-        }
+        
 
         public ContactHelper Modify(ContactData contact)
         {
@@ -48,6 +44,13 @@ namespace WebAddressbookTests
 
         public ContactHelper SelectContact()
         {
+            if (IsElementPresent(By.Name("selected[]")))
+            {
+                driver.FindElement(By.Name("selected[]")).Click();
+                return this;
+            }
+            ContactData contact = new ContactData("firstname", "middlename", "lastname");
+            Create(contact);
             driver.FindElement(By.Name("selected[]")).Click(); 
             return this;
         }
@@ -59,12 +62,26 @@ namespace WebAddressbookTests
 
         public ContactHelper InitContactModify()
         {
+            if (IsElementPresent(By.XPath("//img[@alt='Edit']")))
+            {
+                driver.FindElement(By.XPath("//img[@alt='Edit']")).Click();
+                return this;
+            }
+            ContactData contact = new ContactData("firstname", "middlename", "lastname");
+            Create(contact);
             driver.FindElement(By.XPath("//img[@alt='Edit']")).Click();
             return this;
         }
 
         public ContactHelper DeletingContact()
         {
+            if (driver.FindElement(By.XPath("(//input[@name='selected[]'])")).Selected)
+            {
+                driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
+                driver.SwitchTo().Alert().Accept();
+                return this;
+            }
+            SelectContact();
             driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
             driver.SwitchTo().Alert().Accept(); 
             return this; 
@@ -87,6 +104,11 @@ namespace WebAddressbookTests
         public ContactHelper InitContactCreation()
         {
             driver.FindElement(By.LinkText("add new")).Click();
+            return this;
+        }
+        public ContactHelper ReturnToHomePage()
+        {
+            driver.FindElement(By.LinkText("home page")).Click();
             return this;
         }
     }
