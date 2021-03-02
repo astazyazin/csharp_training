@@ -12,18 +12,6 @@ namespace WebAddressbookTests
     public class LoginTests : TestBase
     {
         [Test]
-        public void LoginWithValidCredentials()
-        {
-            //prepared
-            app.Auth.Logout();
-            //action
-            AccountData account = new AccountData("admin", "secret");
-            app.Auth.Login(account);
-            //verifiacation
-            Assert.IsTrue(app.Auth.IsLoggedIn(account));
-
-        }
-        [Test]
         public void LoginWithInvalidCredentials()
         {
             //prepared
@@ -35,5 +23,18 @@ namespace WebAddressbookTests
             Assert.IsFalse(app.Auth.IsLoggedIn(account));
 
         }
+        [Test]
+        public void LoginWithValidCredentials()
+        {
+            //prepared
+            app.Auth.Logout();
+            //action
+            AccountData account = new AccountData("admin", "secret");
+            app.Auth.Login(account);
+            //verifiacation
+            Assert.IsTrue(app.Auth.IsLoggedIn(account));
+
+        }
+        
     }
 }
