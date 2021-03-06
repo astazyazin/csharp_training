@@ -24,10 +24,10 @@ namespace WebAddressbookTests
             return this;
         }
 
-        public ContactHelper Removal()
+        public ContactHelper Removal(int p)
         {
            
-            SelectContact();
+            SelectContact(p);
             DeletingContact();
             return this;
         }
@@ -43,9 +43,20 @@ namespace WebAddressbookTests
             return this;
         }
 
-        public ContactHelper SelectContact()
+        public List<ContactData> GetContactList()
         {
-            driver.FindElement(By.Name("selected[]")).Click(); 
+            List<ContactData> contacts = new List<ContactData>();
+            ICollection<IWebElement> elements = driver.FindElements(By.CssSelector("tr[name=entry]"));
+            foreach (IWebElement element in elements)
+            {
+                contacts.Add(new ContactData(element.FindElement(By.XPath("td[3]")).Text, element.FindElement(By.XPath("td[2]")).Text));
+            }
+            return contacts;
+        }
+
+        public ContactHelper SelectContact(int index)
+        {
+            driver.FindElement(By.XPath("(//input[@name='selected[]'])[" + (index + 1) + "]")).Click(); 
             return this;
         }
         public ContactHelper SubmitContactUpdate()
@@ -63,7 +74,8 @@ namespace WebAddressbookTests
         public ContactHelper DeletingContact()
         {
             driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
-            driver.SwitchTo().Alert().Accept(); 
+            driver.SwitchTo().Alert().Accept();
+            driver.FindElement(By.LinkText("home")).Click();
             return this; 
         }
 
