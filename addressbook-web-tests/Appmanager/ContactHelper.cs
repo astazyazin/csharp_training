@@ -26,12 +26,7 @@ namespace WebAddressbookTests
 
         public ContactHelper Removal()
         {
-            //если нет контакта- создаем
-            if (!IsElementPresent(By.Name("selected[]")))
-            {
-                ContactData newcontact = new ContactData("firstname", "middlename", "lastname");
-                Create(newcontact);
-            }
+           
             SelectContact();
             DeletingContact();
             return this;
@@ -41,12 +36,6 @@ namespace WebAddressbookTests
 
         public ContactHelper Modify(ContactData contact)
         {
-            //если нет контакта- создаем
-            if (!IsElementPresent(By.Name("selected[]")))
-            {
-                ContactData newcontact = new ContactData("firstname", "middlename", "lastname");
-                Create(newcontact);
-            }
             InitContactModify();
             FillContactForm(contact);
             SubmitContactUpdate();

@@ -20,12 +20,6 @@ namespace WebAddressbookTests
         public GroupHelper Remove()
         {
             manager.Navigator.GoToGroupsPage();
-            //если ни одной группы нет, то создаем ее
-            if (!IsElementPresent(By.XPath("(//input[@name='selected[]'])")))
-            {
-                GroupData group = new GroupData("newgroup", "header", "footer");
-                Create(group);
-            }
             SelectGroup();
             RemoveGroup();
             ReturnToGroupsPage();
@@ -35,12 +29,6 @@ namespace WebAddressbookTests
         public GroupHelper Modify(GroupData newGroup)
         {
             manager.Navigator.GoToGroupsPage();
-            //если ни одной группы нет, то создаем ее
-            if (!IsElementPresent(By.XPath("(//input[@name='selected[]'])")))
-            {
-                GroupData group = new GroupData("newgroup", "header", "footer");
-                Create(group);
-            }
             SelectGroup();
             InitGroupModification();
             FillGroupForm(newGroup);
@@ -109,13 +97,7 @@ namespace WebAddressbookTests
 
         public GroupHelper InitGroupModification()
         {
-            //если ни одна группа не выбрана, то предварительно выбираем
-            if (driver.FindElement(By.XPath("(//input[@name='selected[]'])")).Selected)
-            {
-                driver.FindElement(By.Name("edit")).Click();
-                return this;
-            }
-            SelectGroup();
+            
             driver.FindElement(By.Name("edit")).Click();
             return this; 
         }
