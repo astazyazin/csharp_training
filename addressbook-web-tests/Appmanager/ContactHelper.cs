@@ -32,26 +32,38 @@ namespace WebAddressbookTests
             return this;
         }
 
-        
-
-        public ContactHelper Modify(ContactData contact)
+        public int GetGroupCount()
         {
-            InitContactModify();
+            return driver.FindElements(By.CssSelector("tr[name=entry]")).Count;
+        }
+
+        public ContactHelper Modify(int p,ContactData contact)
+        {
+            InitContactModify(p);
             FillContactForm(contact);
             SubmitContactUpdate();
             ReturnToHomePage();
             return this;
         }
 
+        private List<ContactData> contactCashe = null;
+
         public List<ContactData> GetContactList()
         {
-            List<ContactData> contacts = new List<ContactData>();
-            ICollection<IWebElement> elements = driver.FindElements(By.CssSelector("tr[name=entry]"));
-            foreach (IWebElement element in elements)
+            if (contactCashe== null)
             {
-                contacts.Add(new ContactData(element.FindElement(By.XPath("td[3]")).Text, element.FindElement(By.XPath("td[2]")).Text));
+                contactCashe = new List<ContactData>();
+                ICollection<IWebElement> elements = driver.FindElements(By.CssSelector("tr[name=entry]"));
+                foreach (IWebElement element in elements)
+                {
+                    contactCashe.Add(new ContactData(element.FindElement(By.XPath("td[3]")).Text, element.FindElement(By.XPath("td[2]")).Text)
+                    {
+                        Id = element.FindElement(By.TagName("input")).GetAttribute("value")
+                    });
+                }
             }
-            return contacts;
+            
+            return new List<ContactData>(contactCashe);
         }
 
         public ContactHelper SelectContact(int index)
@@ -62,18 +74,20 @@ namespace WebAddressbookTests
         public ContactHelper SubmitContactUpdate()
         {
             driver.FindElement(By.XPath("(//input[@name='update'])[2]")).Click();
+            contactCashe = null;
             return this;
         }
 
-        public ContactHelper InitContactModify()
+        public ContactHelper InitContactModify(int index)
         {
-            driver.FindElement(By.XPath("//img[@alt='Edit']")).Click();
+            driver.FindElement(By.XPath("//img[@alt='Edit'][" + (index + 1) + "]")).Click();
             return this;
         }
 
         public ContactHelper DeletingContact()
         {
             driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
+            contactCashe = null;
             driver.SwitchTo().Alert().Accept();
             driver.FindElement(By.LinkText("home")).Click();
             return this; 
@@ -82,6 +96,7 @@ namespace WebAddressbookTests
         public ContactHelper SubmitContactCreation()
         {
             driver.FindElement(By.XPath("(//input[@name='submit'])[2]")).Click();
+            contactCashe = null;
             return this;
         }
 

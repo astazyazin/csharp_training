@@ -8,62 +8,30 @@ namespace WebAddressbookTests
 {
     public class ContactData : IEquatable<ContactData>, IComparable<ContactData>
     {
-        private string firstname;
-        private string middlename;
-        private string lastname;
-     /*   private string nickname = "";
-        private string title = "";
-        private string company = "";
-        private string address = "";
-        private string telephoneHome = "";
-        private string telephoneMobile = "";
-        private string telephoneWork = "";
-        private string telephoneFax = "";
-        private string email = "";
-        private string email2 = "";
-        private string email3 = "";
-        private string homepage = "";
-        private int bday = 0;
-        private string bmonth = "";
-        private string byear = "";
-        private int aday = 0;
-        private string amonth = "";
-        private string ayear = "";
-        private string secondsryAddress = "";
-        private string secondaryTelephoneHome = "";
-        private string note = ""; */
-
-
-
+       
         public ContactData (string firstname, string middlename, string lastname)
         {
-            this.firstname = firstname;
-            this.lastname = lastname;
-            this.middlename = middlename;
+            Firstname = firstname;
+            Lastname = lastname;
+            Middlename = middlename;
         }
 
         public ContactData(string firstname, string lastname)
         {
-            this.firstname = firstname;
-            this.lastname = lastname;
+            Firstname = firstname;
+            Lastname = lastname;
+            Middlename = null;
            
         }
 
-        public string Firstname
-        {
-            get { return firstname; }
-            set { firstname = value; }
-        }
-        public string Middlename
-        {
-            get { return middlename; }
-            set { middlename = value; }
-        }
-        public string Lastname
-        {
-            get { return lastname; }
-            set { lastname = value; }
-        }
+        public string Firstname { get; set; }
+        
+        public string Middlename { get; set; }
+
+        public string Lastname { get; set; }
+
+        public string Id { get; set; }
+
 
         public int CompareTo(ContactData other)
         {

@@ -13,23 +13,35 @@ namespace WebAddressbookTests
         {
             ContactData contact = new ContactData("firstname_mod", "middlename_mod", "lastname_mod");
             //если нет контакта- создаем
-            bool isContactPresent = app.Contact.IsElementPresent(By.Name("selected[]"));
+            bool isContactPresent = app.Contacts.IsElementPresent(By.Name("selected[]"));
 
             if (!isContactPresent)
             {
                 ContactData newcontact = new ContactData("firstname", "middlename", "lastname");
-                app.Contact.Create(newcontact);
+                app.Contacts.Create(newcontact);
             }
-            List<ContactData> oldContacts = app.Contact.GetContactList();
+            List<ContactData> oldContacts = app.Contacts.GetContactList();
+            ContactData oldData = oldContacts[0];
 
-            app.Contact.Modify(contact);
+            app.Contacts.Modify(0,contact);
 
-            List<ContactData> newContacts = app.Contact.GetContactList();
+            Assert.AreEqual(oldContacts.Count , app.Contacts.GetGroupCount());
+
+            List<ContactData> newContacts = app.Contacts.GetContactList();
             oldContacts[0].Firstname = contact.Firstname;
             oldContacts[0].Lastname = contact.Lastname;
             oldContacts.Sort();
             newContacts.Sort();
             Assert.AreEqual(oldContacts, newContacts);
+            
+            foreach (ContactData contacts in newContacts)
+            {
+                if (contacts.Id == oldData.Id)
+                {
+                    Assert.AreEqual(contact.Firstname, contacts.Firstname);
+                    Assert.AreEqual(contact.Lastname, contacts.Lastname);
+                }
+            }
         }
     }
 }
