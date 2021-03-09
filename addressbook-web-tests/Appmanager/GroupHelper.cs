@@ -73,6 +73,12 @@ namespace WebAddressbookTests
             ReturnToGroupsPage();
             return this;
         }
+
+        public bool IsGroupsPresent()
+        {
+            manager.Navigator.GoToGroupsPage();
+            return IsElementPresent(By.XPath("(//input[@name='selected[]'])")); ;
+        }
         public GroupHelper RemoveGroup()
         {
             driver.FindElement(By.Name("delete")).Click();

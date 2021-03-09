@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using NUnit.Framework;
 using System.Collections.Generic;
-using OpenQA.Selenium;
+
 
 
 namespace WebAddressbookTests
@@ -17,8 +17,8 @@ namespace WebAddressbookTests
         public void GroupRemovalTest()
         {
             //если ни одной группы нет, то создаем ее
-            bool isGroupPresent = app.Groups.IsElementPresent(By.XPath("(//input[@name='selected[]'])"));
-            if (!isGroupPresent)
+            
+            if (!app.Groups.IsGroupsPresent())
             {
                 GroupData group = new GroupData("newgroup", "header", "footer");
                 app.Groups.Create(group);

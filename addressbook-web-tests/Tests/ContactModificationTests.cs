@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
-using OpenQA.Selenium;
+
 
 
 namespace WebAddressbookTests
@@ -13,9 +13,8 @@ namespace WebAddressbookTests
         {
             ContactData contact = new ContactData("firstname_mod", "middlename_mod", "lastname_mod");
             //если нет контакта- создаем
-            bool isContactPresent = app.Contacts.IsElementPresent(By.Name("selected[]"));
-
-            if (!isContactPresent)
+            
+            if (!app.Contacts.IsContactsPresent())
             {
                 ContactData newcontact = new ContactData("firstname", "middlename", "lastname");
                 app.Contacts.Create(newcontact);

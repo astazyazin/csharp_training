@@ -66,6 +66,11 @@ namespace WebAddressbookTests
             return new List<ContactData>(contactCashe);
         }
 
+        public bool IsContactsPresent()
+        {
+            return IsElementPresent(By.Name("selected[]"));
+        }
+
         public ContactHelper SelectContact(int index)
         {
             driver.FindElement(By.XPath("(//input[@name='selected[]'])[" + (index + 1) + "]")).Click(); 

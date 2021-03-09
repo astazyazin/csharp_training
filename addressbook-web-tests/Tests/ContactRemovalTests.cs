@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using OpenQA.Selenium;
+
 
 
 namespace WebAddressbookTests
@@ -16,9 +16,8 @@ namespace WebAddressbookTests
         public void ContactRemovalTest()
         {
             //если нет контакта- создаем
-            bool isContactPresent = app.Contacts.IsElementPresent(By.Name("selected[]"));
-
-            if (!isContactPresent)
+            
+            if (!app.Contacts.IsContactsPresent())
             {
                 ContactData newcontact = new ContactData("firstname", "middlename", "lastname");
                 app.Contacts.Create(newcontact);
