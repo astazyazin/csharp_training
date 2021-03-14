@@ -36,11 +36,23 @@ namespace WebAddressbookTests
             };
         }
 
+        public ContactData GetContactInformationFromDetailsForm(int index)
+        {
+            manager.Navigator.OpenHomePage();
+            ShowDetailsInfo(index);
+            string allDetails = Regex.Replace((driver.FindElement(By.Id("content")).Text),"[ \r\nH:M:W:]","");
+            return new ContactData("", "")
+            {
+                DetailsInfo = allDetails
+            };
+        }
+
         public ContactData GetContactInformationFromEditForm(int index)
         {
             manager.Navigator.OpenHomePage();
             InitContactModify(index);
             string firstName = driver.FindElement(By.Name("firstname")).GetAttribute("value");
+            string middleName = driver.FindElement(By.Name("middlename")).GetAttribute("value");
             string lastName = driver.FindElement(By.Name("lastname")).GetAttribute("value");
             string address = driver.FindElement(By.Name("address")).GetAttribute("value");
 
@@ -52,7 +64,7 @@ namespace WebAddressbookTests
             string email2 = driver.FindElement(By.Name("email2")).GetAttribute("value");
             string email3 = driver.FindElement(By.Name("email3")).GetAttribute("value");
 
-            return new ContactData(firstName, lastName)
+            return new ContactData(firstName, middleName, lastName)
             {
                 Address = address, 
                 HomePhone = homePhone,
@@ -136,6 +148,12 @@ namespace WebAddressbookTests
         public ContactHelper InitContactModify(int index)
         {
             driver.FindElement(By.XPath("//tr[@name='entry'][" + (index + 1) + "]//a//img[@alt='Edit']")).Click();
+            return this;
+        }
+
+        public ContactHelper ShowDetailsInfo(int index)
+        {
+            driver.FindElement(By.XPath("//tr[@name='entry'][" + (index + 1) + "]//a//img[@alt='Details']")).Click();
             return this;
         }
 
