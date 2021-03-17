@@ -40,10 +40,10 @@ namespace WebAddressbookTests
         {
             manager.Navigator.OpenHomePage();
             ShowDetailsInfo(index);
-            string allDetails = Regex.Replace((driver.FindElement(By.Id("content")).Text),"[ \r\nH:M:W:]","");
+           // string allDetails = Regex.Replace((driver.FindElement(By.Id("content")).Text),"[ \r\nH:M:W:]","");
             return new ContactData("", "")
             {
-                DetailsInfo = allDetails
+                DetailsInfo = driver.FindElement(By.Id("content")).Text
             };
         }
 

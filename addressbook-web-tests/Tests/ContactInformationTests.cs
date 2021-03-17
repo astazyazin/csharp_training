@@ -22,8 +22,8 @@ namespace WebAddressbookTests
         [Test]
         public void TestDetailsInformation()
         {
-            ContactData fromForm = app.Contacts.GetContactInformationFromEditForm(5);
-            ContactData fromDetails = app.Contacts.GetContactInformationFromDetailsForm(5);
+            ContactData fromForm = app.Contacts.GetContactInformationFromEditForm(8);
+            ContactData fromDetails = app.Contacts.GetContactInformationFromDetailsForm(8);
 
             //verification
             Assert.AreEqual(fromForm.DetailsInfo, fromDetails.DetailsInfo);

@@ -100,14 +100,14 @@ namespace WebAddressbookTests
                 else
                 {
 
-                    return (Firstname + Middlename + Lastname 
-                                + Address
-                                + HomePhone.Replace(" ", "") 
-                                + MobilePhone.Replace(" ", "") 
-                                + WorkPhone.Replace(" ", "")
-                                + Email.Replace(" ", "") 
-                                + Email2.Replace(" ", "") 
-                                + Email3.Replace(" ", ""))
+                    return ((CleanUpName(Firstname) + CleanUpName(Middlename) + CleanUpName(Lastname)).Trim() + "\r\n"
+                                + CleanUpMailAndAddress(Address) + "\r\n"
+                                + CleanUpPhone(HomePhone, "H")
+                                + CleanUpPhone(MobilePhone, "M")
+                                + CleanUpPhone(WorkPhone, "W") + "\r\n"
+                                + CleanUpMailAndAddress(Email)
+                                + CleanUpMailAndAddress(Email2)
+                                + Email3)
                                 .Trim();
                 }
             }
@@ -116,14 +116,38 @@ namespace WebAddressbookTests
                 detailsInfo = value;
             }
         }
-        
+        private string CleanUpName(string detail)
+        {
+            if (detail == null || detail == "")
+            {
+                return "";
+            }
+            return (detail + " ");
+        }
+        private string CleanUpPhone(string phone, string prefix)
+        {
+            if (phone == null || phone == "")
+            {
+                return "";
+            }
+            return (prefix + ": " + phone + "\r\n");
+        }
+        private string CleanUpMailAndAddress(string mail)
+        {
+            if (mail== null || mail== "")
+            {
+                return "";
+            }
+            return (mail + "\r\n");
+        }
+
         private string CleanUp(string phone)
         {
             if (phone == null || phone == "")
             {
                 return "";
             }
-            return Regex.Replace(phone, "[ -()]", "") + "\r\n";// phone.Replace(" ","").Replace("-", "").Replace("(", "").Replace(")", "") + "\r\n";
+            return Regex.Replace(phone, "[ -()]", "") + "\r\n";
         }
 
         public string Id { get; set; }
