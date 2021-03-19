@@ -13,6 +13,10 @@ namespace WebAddressbookTests
         private string allPhones;
         private string allEmails;
         private string detailsInfo;
+        private string bday;
+        private string bmonth;
+        private string aday;
+        private string amonth;
 
         public ContactData (string firstname, string middlename, string lastname)
         {
@@ -37,17 +41,96 @@ namespace WebAddressbookTests
 
         public string Address { get; set; }
 
+        public string Nickname { get; set; }
+
+        public string Company { get; set; }
+
+        public string Title { get; set; }
+
         public string HomePhone { get; set; }
 
         public string MobilePhone { get; set; }
 
         public string WorkPhone { get; set; }
 
+        public string Fax { get; set; }
+
         public string Email { get; set; }
 
         public string Email2 { get; set; }
 
         public string Email3 { get; set; }
+
+        public string Homepage { get; set; }
+
+        public string Bday 
+        { get {
+                if (String.Compare(bday, "0") == 0)
+                {
+                    return "";
+                }
+                return bday; } 
+          set {
+                bday = value; }
+        }
+        
+        public string Bmonth
+        {
+            get
+            {
+                if (String.Compare(bmonth, "-") == 0)
+                {
+                    return "";
+                }
+                return bmonth;
+            }
+            set
+            {
+                bmonth = value;
+            }
+        }
+
+        public string Byear { get; set; }
+
+        public string Aday
+        {
+            get
+            {
+                if (String.Compare(aday, "0") == 0)
+                {
+                    return "";
+                }
+                return aday;
+            }
+            set
+            {
+                aday = value;
+            }
+        }
+
+        public string Amonth
+        {
+            get
+            {
+                if (String.Compare(amonth, "-") == 0)
+                {
+                    return "";
+                }
+                return amonth;
+            }
+            set
+            {
+                amonth = value;
+            }
+        }
+
+        public string Ayear { get; set; }
+
+        public string SecAdress { get; set; }
+
+        public string SecHomePhone { get; set; }
+
+        public string Notes { get; set; }
 
         public string AllPhones
         { 
@@ -100,14 +183,26 @@ namespace WebAddressbookTests
                 else
                 {
 
-                    return ((CleanUpName(Firstname) + CleanUpName(Middlename) + CleanUpName(Lastname)).Trim() + "\r\n"
-                                + CleanUpMailAndAddress(Address) + "\r\n"
-                                + CleanUpPhone(HomePhone, "H")
-                                + CleanUpPhone(MobilePhone, "M")
-                                + CleanUpPhone(WorkPhone, "W") + "\r\n"
-                                + CleanUpMailAndAddress(Email)
-                                + CleanUpMailAndAddress(Email2)
-                                + Email3)
+                    return ((CleanUpName(Firstname,"") + CleanUpName(Middlename,"") + CleanUpName(Lastname,"")).Trim() + "\r\n"
+                                + CleanUpPlus(Nickname)
+                                + CleanUpPlus(Title)
+                                + CleanUpPlus(Company)
+
+                                + CleanUpPlus(Address) + "\r\n"
+                                + CleanUpPhone(HomePhone, "H: ")
+                                + CleanUpPhone(MobilePhone, "M: ")
+                                + CleanUpPhone(WorkPhone, "W: ")
+                                + CleanUpPhone(Fax, "F: ") + "\r\n"
+                                + CleanUpPlus(Email)
+                                + CleanUpPlus(Email2)
+                                + CleanUpPlus(Email3)
+                                + CleanUpPhone((Homepage).Trim(), ("Homepage:" + "\r\n") ) + "\r\n"
+                                + CleanUpDates(Bday,Bmonth,Byear, "Birthday ")
+                                + CleanUpDates(Aday, ChangeFirstLetterToUppercase(Amonth), Ayear, "Anniversary ") + "\r\n"
+                                + CleanUpPlus(SecAdress) + "\r\n"
+                                + CleanUpPhone(SecHomePhone, "P: ") + "\r\n"
+                                + CleanUpPlus(Notes)
+                                )
                                 .Trim();
                 }
             }
@@ -116,13 +211,23 @@ namespace WebAddressbookTests
                 detailsInfo = value;
             }
         }
-        private string CleanUpName(string detail)
+        private string ChangeFirstLetterToUppercase (string text)
+        {
+            if (text == null || text == "")
+            {
+                return "";
+            }
+            System.Text.StringBuilder sb = new System.Text.StringBuilder(text);
+            sb[0] = System.Char.ToUpper(sb[0]);
+            return sb.ToString();
+        }
+        private string CleanUpName(string detail, string postfix)
         {
             if (detail == null || detail == "")
             {
                 return "";
             }
-            return (detail + " ");
+            return (detail + postfix + " ");
         }
         private string CleanUpPhone(string phone, string prefix)
         {
@@ -130,15 +235,56 @@ namespace WebAddressbookTests
             {
                 return "";
             }
-            return (prefix + ": " + phone + "\r\n");
+            return (prefix +  phone + "\r\n");
         }
-        private string CleanUpMailAndAddress(string mail)
+
+        private string Age (string year, string month, string day)
         {
-            if (mail== null || mail== "")
+            if ((day == null || day == "") && (month == null || month == "") && (year == null || year == ""))
             {
                 return "";
             }
-            return (mail + "\r\n");
+            if (day == "" || day == "0")
+            {
+                day = "1";
+            }
+            if (month == "" || month == "-")
+            {
+                month = "1";
+            }
+            string yearnow = DateTime.Now.Year.ToString(); // получаем текущий год
+            string input = yearnow + "/" + month + "/" + day; // получаем строку для парсинга  из входных строк , но с текущим годом
+            int diff = 0;
+            
+            DateTime datenow = DateTime.Now; // получаем текущую дату
+            DateTime dateb = DateTime.Parse(input);// получаем дату рождения в этом году
+            
+            
+            if (datenow <= dateb)
+            {
+                diff = Convert.ToInt32(yearnow) - Convert.ToInt32(year) - 1;
+                return "(" + diff + ")";
+            }
+            diff = Convert.ToInt32(yearnow) - Convert.ToInt32(year);
+            return "(" + diff + ")"; 
+
+        }
+        private string CleanUpDates(string day, string month, string year, string prefix)
+        {
+            if ((day == null || day == "") && (month == null || month == "") && (year == null || year == ""))
+            {
+                return "";
+            }
+            return (prefix + CleanUpName(day,".") + CleanUpName(month,"") + CleanUpName(year,"") + Age(year, month, day) + "\r\n");
+        }
+        
+        private string CleanUpPlus(string text)
+        {
+            if (text== null || text== "")
+            {
+                return "";
+            }
+            return (text + "\r\n");
         }
 
         private string CleanUp(string phone)
