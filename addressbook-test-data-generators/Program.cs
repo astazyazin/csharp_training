@@ -11,22 +11,50 @@ namespace addressbook_test_data_generators
 {
     class Program
     {
-        
-
         static void Main(string[] args)
         {
-            int count = Convert.ToInt32(args[0]);
-            string filename = args[1];
-            string format = args[2];
+            string choice = args[0];
+            int count = Convert.ToInt32(args[1]);
+            string filename = args[2];
+            string format = args[3];
             List<GroupData> groups = new List<GroupData>();
-            for (int i = 0; i < count; i++)
+            List<ContactData> contacts = new List<ContactData>();
+            if (choice == "groups") 
             {
-                groups.Add(new GroupData(TestBase.GenerateRandomString(10))
+                
+                for (int i = 0; i < count; i++)
                 {
-                    Header = TestBase.GenerateRandomString(10),
-                    Footer = TestBase.GenerateRandomString(10)
-                });
+                    groups.Add(new GroupData(TestBase.GenerateRandomString(10))
+                    {
+                        Header = TestBase.GenerateRandomString(10),
+                        Footer = TestBase.GenerateRandomString(10)
+                    });
+                }
+            } else 
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    contacts.Add(new ContactData(TestBase.GenerateRandomString(30), TestBase.GenerateRandomString(30), TestBase.GenerateRandomString(30))
+                    {
+                        Nickname = TestBase.GenerateRandomString(30),
+                        Company = TestBase.GenerateRandomString(30),
+                        Title = TestBase.GenerateRandomString(30),
+                        Address = TestBase.GenerateRandomString(50),
+                        HomePhone = TestBase.GeneratePhoneNumber(),
+                        MobilePhone = TestBase.GeneratePhoneNumber(),
+                        WorkPhone = TestBase.GeneratePhoneNumber(),
+                        Fax = TestBase.GeneratePhoneNumber(),
+                        Homepage = TestBase.GenerateRandomString(30),
+                        SecHomePhone = TestBase.GeneratePhoneNumber(),
+                        SecAdress = TestBase.GenerateRandomString(50),
+                        Notes = TestBase.GenerateRandomString(50),
+                        Email = TestBase.GenerateRandomString(10) + "@" + TestBase.GenerateRandomString(10) + "." + TestBase.GenerateRandomString(4),
+                        Email2 = TestBase.GenerateRandomString(10) + "@" + TestBase.GenerateRandomString(10) + "." + TestBase.GenerateRandomString(4),
+                        Email3 = TestBase.GenerateRandomString(10) + "@" + TestBase.GenerateRandomString(10) + "." + TestBase.GenerateRandomString(4)
+                    });
+                }
             }
+            
             if (format == "excel")
             {
                 writeGroupsToExcelFile(groups, filename);
@@ -40,11 +68,20 @@ namespace addressbook_test_data_generators
                 }
                 else if (format == "xml")
                 {
-                    writeGroupsToXmlFile(groups, writer);
+                    if (choice == "groups")
+                    {
+                        writeGroupsToXmlFile(groups, writer);
+                    }
+                    writeContactsToXmlFile(contacts, writer);
                 }
                 else if (format == "json")
                 {
-                    writeGroupsToJsonFile(groups, writer);
+                    if (choice == "groups")
+                    {
+                        writeGroupsToJsonFile(groups, writer);
+                    }
+                    writeContactsToJsonFile(contacts, writer);
+                        
                 }
                 else
                 {
@@ -66,9 +103,18 @@ namespace addressbook_test_data_generators
                 new XmlSerializer(typeof(List<GroupData>))
                     .Serialize(writer,groups);
             }
+            static void writeContactsToXmlFile(List<ContactData> contacts, StreamWriter writer)
+            {
+                new XmlSerializer(typeof(List<ContactData>))
+                    .Serialize(writer, contacts);
+            }
             static void writeGroupsToJsonFile(List<GroupData> groups, StreamWriter writer)
             {
                 writer.Write(JsonConvert.SerializeObject(groups, Newtonsoft.Json.Formatting.Indented));
+            }
+            static void writeContactsToJsonFile(List<ContactData> contacts, StreamWriter writer)
+            {
+                writer.Write(JsonConvert.SerializeObject(contacts, Newtonsoft.Json.Formatting.Indented));
             }
         }
 
