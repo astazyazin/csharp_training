@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using System.Text.RegularExpressions;
 
 
 namespace WebAddressbookTests
@@ -31,7 +32,8 @@ namespace WebAddressbookTests
             {
                 builder.Append(Convert.ToChar(32 + Convert.ToInt32(rnd.NextDouble() * 65 )));
             }
-            return builder.ToString();
+            return Regex.Replace(builder.ToString(), "[`!@#$%^&*()_[{}<>.:/['-=+?]", "");
+            // return Regex.Replace(phone, "[ -()]", "") + "\r\n";
         }
         public static string GeneratePhoneNumber()
         {

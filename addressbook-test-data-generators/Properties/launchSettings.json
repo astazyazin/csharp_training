@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "addressbook-test-data-generators": {
+      "commandName": "Project",
+      "commandLineArgs": "contact 3 contacts.json json",
+      "workingDirectory": "c:\\Users\\Admin\\Documents\\GitHub\\csharp_training_12022021\\addressbook-test-data-generators\\bin\\Debug\\netcoreapp3.1\\"
+    }
+  }
+}

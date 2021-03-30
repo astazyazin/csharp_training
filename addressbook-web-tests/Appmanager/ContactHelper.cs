@@ -37,7 +37,8 @@ namespace WebAddressbookTests
             };
         }
 
-        
+       
+
         public void AddContactToGroup(ContactData contact, GroupData group)
         {
             manager.Navigator.OpenHomePage();
@@ -46,6 +47,25 @@ namespace WebAddressbookTests
             SelectGroupToAdd(group.Name);
             CommitAddingContactTogroup();
             new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(d => d.FindElements(By.CssSelector("div.msgbox")).Count > 0);
+        }
+
+        public void RemoveContactFromGroup(GroupData group, ContactData contact)
+        {
+            manager.Navigator.OpenHomePage();
+            SelectGroupToRemove(group.Name);
+            SelectContactById(contact.Id);
+            CommitRemovalContactFromGroup();
+            new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(d => d.FindElements(By.CssSelector("div.msgbox")).Count > 0);
+        }
+
+        private void SelectGroupToRemove(string name)
+        {
+            new SelectElement(driver.FindElement(By.Name("group"))).SelectByText(name); ;
+        }
+
+        private void CommitRemovalContactFromGroup()
+        {
+            driver.FindElement(By.Name("remove")).Click(); ;
         }
 
         private void SelectContactById(string id)

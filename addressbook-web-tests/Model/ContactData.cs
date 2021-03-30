@@ -327,6 +327,7 @@ namespace WebAddressbookTests
                 return "";
             }
             return Regex.Replace(phone, "[ -()]", "") + "\r\n";
+            
         }
 
         public static List<ContactData> GetAll()
