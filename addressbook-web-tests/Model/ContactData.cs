@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using LinqToDB.Mapping;
 using System.Threading.Tasks;
 
 namespace WebAddressbookTests
 {
+    [Table (Name = "addressbook")]
     public class ContactData : IEquatable<ContactData>, IComparable<ContactData>
     {
 
@@ -36,37 +38,52 @@ namespace WebAddressbookTests
             Middlename = null;
            
         }
-
+        [Column(Name = "firstname")]
         public string Firstname { get; set; }
-        
+
+        [Column(Name = "middlename")]
         public string Middlename { get; set; }
 
+        [Column(Name = "lastname")]
         public string Lastname { get; set; }
 
+        [Column(Name = "address")]
         public string Address { get; set; }
 
+        [Column(Name = "nickname")]
         public string Nickname { get; set; }
 
+        [Column(Name = "company")]
         public string Company { get; set; }
 
+        [Column(Name = "title")]
         public string Title { get; set; }
 
+        [Column(Name = "home")]
         public string HomePhone { get; set; }
 
+        [Column(Name = "mobile")]
         public string MobilePhone { get; set; }
 
+        [Column(Name = "work")]
         public string WorkPhone { get; set; }
 
+        [Column(Name = "fax")]
         public string Fax { get; set; }
 
+        [Column(Name = "email")]
         public string Email { get; set; }
 
+        [Column(Name = "email2")]
         public string Email2 { get; set; }
 
+        [Column(Name = "email3")]
         public string Email3 { get; set; }
 
+        [Column(Name = "homepage")]
         public string Homepage { get; set; }
 
+        [Column(Name = "bday")]
         public string Bday 
         { get {
                 if (String.Compare(bday, "0") == 0)
@@ -77,7 +94,8 @@ namespace WebAddressbookTests
           set {
                 bday = value; }
         }
-        
+
+        [Column(Name = "bmonth")]
         public string Bmonth
         {
             get
@@ -94,8 +112,10 @@ namespace WebAddressbookTests
             }
         }
 
+        [Column(Name = "byear")]
         public string Byear { get; set; }
 
+        [Column(Name = "aday")]
         public string Aday
         {
             get
@@ -112,6 +132,7 @@ namespace WebAddressbookTests
             }
         }
 
+        [Column(Name = "amonth")]
         public string Amonth
         {
             get
@@ -128,13 +149,23 @@ namespace WebAddressbookTests
             }
         }
 
+        [Column(Name = "ayear")]
         public string Ayear { get; set; }
-
+        
+        [Column(Name = "address2")]
         public string SecAdress { get; set; }
 
+        [Column(Name = "phone2")]
         public string SecHomePhone { get; set; }
 
+        [Column(Name = "notes")]
         public string Notes { get; set; }
+
+        [Column(Name = "id"),PrimaryKey]
+        public string Id { get; set; }
+
+        [Column(Name = "deprecated")]
+        public string Deprecated { get; set; }
 
         public string AllPhones
         { 
@@ -246,30 +277,28 @@ namespace WebAddressbookTests
         {
             if ((day == null || day == "") && (month == null || month == "") && (year == null || year == ""))
             {
-                return "";
+                return "";//если ничего не выбрано ,возвращаем пустую строку
             }
             if (day == "" || day == "0")
             {
-                day = "1";
+                day = "1"; //ессли не выбран день, то по  умолчанию - первой число
             }
             if (month == "" || month == "-")
             {
-                month = "1";
+                month = "1";//если не выбран месяц, то по  умолчанию - первый месяц
             }
             string yearnow = DateTime.Now.Year.ToString(); // получаем текущий год
             string input = yearnow + "/" + month + "/" + day; // получаем строку для парсинга  из входных строк , но с текущим годом
-            int diff = 0;
-            
+                        
             DateTime datenow = DateTime.Now; // получаем текущую дату
             DateTime dateb = DateTime.Parse(input);// получаем дату рождения в этом году
-            
-            
+            int diff;
             if (datenow <= dateb)
             {
                 diff = Convert.ToInt32(yearnow) - Convert.ToInt32(year) - 1;
                 return "(" + diff + ")";
             }
-            diff = Convert.ToInt32(yearnow) - Convert.ToInt32(year);
+            diff = Convert.ToInt32(yearnow) - Convert.ToInt32(year); 
             return "(" + diff + ")"; 
 
         }
@@ -300,8 +329,13 @@ namespace WebAddressbookTests
             return Regex.Replace(phone, "[ -()]", "") + "\r\n";
         }
 
-        public string Id { get; set; }
-        
+        public static List<ContactData> GetAll()
+        {
+            using (AddressBookDB db = new AddressBookDB())
+            {
+                return (from g in db.Contacts.Where(x => x.Deprecated == "0000-00-00 00:00:00") select g).ToList();
+            }
+        }
 
         public int CompareTo(ContactData other)
         {

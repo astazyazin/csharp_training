@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace WebAddressbookTests
 {
@@ -34,6 +35,37 @@ namespace WebAddressbookTests
                 AllPhones = allPhone,
                 AllEmails = allEmail
             };
+        }
+
+        
+        public void AddContactToGroup(ContactData contact, GroupData group)
+        {
+            manager.Navigator.OpenHomePage();
+            ClearGroupFilter();
+            SelectContactById(contact.Id);
+            SelectGroupToAdd(group.Name);
+            CommitAddingContactTogroup();
+            new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(d => d.FindElements(By.CssSelector("div.msgbox")).Count > 0);
+        }
+
+        private void SelectContactById(string id)
+        {
+            driver.FindElement(By.Id(id)).Click();
+        }
+
+        private void CommitAddingContactTogroup()
+        {
+            driver.FindElement(By.Name("add")).Click();
+        }
+
+        private void SelectGroupToAdd(string name)
+        {
+            new SelectElement(driver.FindElement(By.Name("to_group"))).SelectByText(name);
+        }
+
+        private void ClearGroupFilter()
+        {
+            new SelectElement(driver.FindElement(By.Name("group"))).SelectByText("[all]");
         }
 
         public ContactData GetContactInformationFromDetailsForm(int index)
@@ -118,8 +150,14 @@ namespace WebAddressbookTests
 
         public ContactHelper Removal(int p)
         {
-           
             SelectContact(p);
+            DeletingContact();
+            return this;
+        }
+
+        public ContactHelper RemovalById(ContactData contact)
+        {
+            SelectContactById(contact.Id);
             DeletingContact();
             return this;
         }
@@ -137,7 +175,16 @@ namespace WebAddressbookTests
             ReturnToHomePage();
             return this;
         }
+        public ContactHelper ModifyById(ContactData oldData, ContactData contact)
+        {
+            InitContactModify(oldData.Id);
+            FillContactForm(contact);
+            SubmitContactUpdate();
+            ReturnToHomePage();
+            return this;
+        }
 
+        
         private List<ContactData> contactCashe = null;
 
         public List<ContactData> GetContactList()
@@ -178,6 +225,12 @@ namespace WebAddressbookTests
         public ContactHelper InitContactModify(int index)
         {
             driver.FindElement(By.XPath("//tr[@name='entry'][" + (index + 1) + "]//a//img[@alt='Edit']")).Click();
+            return this;
+        }
+        public ContactHelper InitContactModify(string id)
+        {
+            driver.FindElement(By.XPath("//tr[@name='entry']//a[@href='edit.php?id=" + id + "']")).Click();
+            //tr[@name='entry']//a[@href='edit.php?id=79']
             return this;
         }
 

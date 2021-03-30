@@ -57,7 +57,7 @@ namespace addressbook_test_data_generators
             
             if (format == "excel")
             {
-                writeGroupsToExcelFile(groups, filename);
+                WriteGroupsToExcelFile(groups, filename);
             }
             else
             {
@@ -118,7 +118,7 @@ namespace addressbook_test_data_generators
             }
         }
 
-         static void writeGroupsToExcelFile(List<GroupData> groups, string filename)
+         static void WriteGroupsToExcelFile(List<GroupData> groups, string filename)
         {
             Excel.Application app = new Excel.Application();
             app.Visible = true;

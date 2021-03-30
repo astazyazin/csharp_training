@@ -4,13 +4,13 @@ using NUnit.Framework;
 namespace WebAddressbookTests
 {
     [TestFixture]
-    public class ContactInformationTests : AuthTestBase
+    public class ContactInformationTests : ContactTestBase
     {
         [Test]
         public void TestContactInformation()
         {
-            ContactData fromTable = app.Contacts.GetContactInformationFromTable(0);
-            ContactData fromForm = app.Contacts.GetContactInformationFromEditForm(0);
+            ContactData fromTable = app.Contacts.GetContactInformationFromTable(1);
+            ContactData fromForm = app.Contacts.GetContactInformationFromEditForm(1);
 
             //verification
             Assert.AreEqual(fromTable, fromForm);
@@ -22,8 +22,8 @@ namespace WebAddressbookTests
         [Test]
         public void TestDetailsInformation()
         {
-            ContactData fromForm = app.Contacts.GetContactInformationFromEditForm(8);
-            ContactData fromDetails = app.Contacts.GetContactInformationFromDetailsForm(8);
+            ContactData fromForm = app.Contacts.GetContactInformationFromEditForm(1);
+            ContactData fromDetails = app.Contacts.GetContactInformationFromDetailsForm(1);
 
             //verification
             Assert.AreEqual(fromForm.DetailsInfo, fromDetails.DetailsInfo);
