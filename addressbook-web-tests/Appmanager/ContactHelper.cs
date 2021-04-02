@@ -88,6 +88,13 @@ namespace WebAddressbookTests
             new SelectElement(driver.FindElement(By.Name("group"))).SelectByText("[all]");
         }
 
+        public ContactHelper FindContactWithoutGroup()
+        {
+            manager.Navigator.OpenHomePage();
+            new SelectElement(driver.FindElement(By.Name("group"))).SelectByText("[none]");
+            return this;
+        }
+
         public ContactData GetContactInformationFromDetailsForm(int index)
         {
             manager.Navigator.OpenHomePage();
@@ -302,9 +309,12 @@ namespace WebAddressbookTests
             return this;
         }
 
-        public int GetNumberOfSearchResults()
+        public int GetNumberOfSearchResults(int key) // если key =1, то происходит обновление страницы перед снятием значения
         {
-            manager.Navigator.OpenHomePage();
+            if (key == 1)
+            {
+                  manager.Navigator.OpenHomePage();
+            }
             string text = driver.FindElement(By.TagName("label")).Text;
             Match m = new Regex(@"\d+").Match(text);
             return Int32.Parse(m.Value);

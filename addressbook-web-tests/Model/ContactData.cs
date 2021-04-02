@@ -345,11 +345,16 @@ namespace WebAddressbookTests
                 return 1;
             }
             // если firstname равно, то сравниваем lastname
-            if (Firstname.CompareTo(other.Firstname) == 0)
-            {
-                return Lastname.CompareTo(other.Lastname);
-            }
-            return Firstname.CompareTo(other.Firstname);
+            /*   if (Firstname.CompareTo(other.Firstname) == 0)
+               {
+                   return Lastname.CompareTo(other.Lastname);
+               }
+               else if (Lastname.CompareTo(other.Lastname) == 0)
+               {
+                   return Id.CompareTo(other.Id);
+               }
+               return Firstname.CompareTo(other.Firstname); */
+            return Id.CompareTo(other.Id);
         }
 
         public bool Equals(ContactData other)
@@ -362,7 +367,7 @@ namespace WebAddressbookTests
             {
                 return true;
             }
-            return Firstname.Equals(other.Firstname) && Lastname.Equals(other.Lastname);
+            return Firstname.Equals(other.Firstname) && Lastname.Equals(other.Lastname) && Id.Equals(other.Id);
         }
 
         public override int GetHashCode()
