@@ -7,8 +7,10 @@ namespace addressbook_tests_autoit
     public class ApplicationManager
     {
         public static string WINTITLE = "Free Address Book";
+        public static string CONTACTTITLE = "Contact Editor";
         private AutoItX3 aux;
         private GroupHelper groupHelper;
+        private ContactHelper contactHelper;
         public ApplicationManager()
         {
             aux = new AutoItX3();
@@ -18,6 +20,7 @@ namespace addressbook_tests_autoit
             aux.WinWaitActive(WINTITLE);
 
             groupHelper = new GroupHelper(this);
+            contactHelper = new ContactHelper(this);
         }
         public void Stop()
         {
@@ -33,6 +36,13 @@ namespace addressbook_tests_autoit
             get
             {
                 return groupHelper;
+            }
+        }
+        public ContactHelper Contacts
+        {
+            get
+            {
+                return contactHelper;
             }
         }
     }

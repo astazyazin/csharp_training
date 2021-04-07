@@ -7,6 +7,7 @@ namespace addressbook_tests_autoit
     {
         protected ApplicationManager manager;
         protected string WINTITLE;
+        protected string CONTACTTITLE;
         protected AutoItX3 aux;
 
         public HelperBase(ApplicationManager manager)
@@ -14,6 +15,7 @@ namespace addressbook_tests_autoit
             this.manager = manager;
             this.aux = manager.Aux;
             WINTITLE = ApplicationManager.WINTITLE;
+            CONTACTTITLE = ApplicationManager.CONTACTTITLE;
         }
     }
 }
