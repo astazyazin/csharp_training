@@ -23,17 +23,30 @@ namespace mantis_tests
         [Test]
         public void TestAccountRegistration()
         {
-            AccountData account = new AccountData() { 
-            
-            Name = "testuser",
+            AccountData account = new AccountData() 
+            { 
+            Name = "testuser1",
             Password = "password",
-            Email = "testuser@localhost.localdomain"
+            Email = "testuser1@localhost.localdomain"
             };
 
+            List<AccountData> oldAccounts = app.Admin.GetAllAccounts();
+            AccountData existingAccount =  oldAccounts.Find(x => x.Name == account.Name);
+
+            if (existingAccount != null)
+            {
+                app.Admin.DeleteAccount(existingAccount);
+            }
+            oldAccounts = app.Admin.GetAllAccounts();
             app.James.Delete(account);
             app.James.Add(account);
 
             app.Registration.Register(account);
+            List<AccountData> newAccounts = app.Admin.GetAllAccounts();
+            oldAccounts.Add(account);
+            oldAccounts.Sort();
+            newAccounts.Sort();
+            Assert.AreEqual(oldAccounts,newAccounts);
         }
         [OneTimeTearDown]
         public void RestoreConfig()
