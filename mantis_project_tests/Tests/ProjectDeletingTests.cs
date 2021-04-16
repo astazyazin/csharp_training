@@ -9,8 +9,12 @@ namespace mantis_project_tests
         [Test]
         public void DeletingProject()
         {
-           
-            List<ProjectData> oldProjects = app.Project.GetProjectsList();
+            AccountData admin = new AccountData()
+            {
+                Name = "administrator",
+                Password = "root"
+            };
+            List<ProjectData> oldProjects = app.Project.GetProjectsListByAPI(admin);
             // если нет проектов, то создать новый
             if (oldProjects.Count == 0)
             {
@@ -19,10 +23,9 @@ namespace mantis_project_tests
                     ProjectName = "new project5",
                     Description = "description"
                 };
-                app.Project.AddProject(newProject);
+                app.Project.AddProjectByAPI(newProject,admin);
+                oldProjects = app.Project.GetProjectsList();
             }
-
-            oldProjects = app.Project.GetProjectsList();
 
             app.Project.DeleteProject(oldProjects[0].Id);
 

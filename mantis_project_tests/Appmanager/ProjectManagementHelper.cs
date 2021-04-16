@@ -24,8 +24,18 @@ namespace mantis_project_tests
             FillNewProject(project);
             SubmitNewProject();
         }
+        public void AddProjectByAPI(ProjectData project, AccountData account)
+        {
+            Mantis.MantisConnectPortTypeClient client = new Mantis.MantisConnectPortTypeClient();
+            Mantis.ProjectData issue = new Mantis.ProjectData
+            {
+                name = project.ProjectName,
+                description = project.Description
+            };
+            client.mc_project_add(account.Name, account.Password, issue);
+        }
 
-        internal List<ProjectData> GetProjectsList()
+        public List<ProjectData> GetProjectsList()
         {
             manager.Menu.GoToManageProjectsPage();
             manager.Menu.GoToManageProjectsTab();
@@ -48,7 +58,25 @@ namespace mantis_project_tests
             return projects;
         }
 
-     
+        public List<ProjectData> GetProjectsListByAPI(AccountData account)
+        {
+            List<ProjectData> projects = new List<ProjectData>();
+            Mantis.MantisConnectPortTypeClient client = new Mantis.MantisConnectPortTypeClient();
+            Mantis.ProjectData [] projectsAPI = client.mc_projects_get_user_accessible(account.Name, account.Password);
+            for(int i=0; i < projectsAPI.Length; i++)
+            {
+                projects.Add(new ProjectData()
+                {
+                    ProjectName = projectsAPI[i].name,
+                    Description = projectsAPI[i].description,
+                    Id = Convert.ToInt32(projectsAPI[i].id)
+                });
+            }
+            return projects;
+        }
+
+
+
         private void InitCreationNewProject()
         {
             driver.FindElement(By.CssSelector("button[type='submit']")).Click();
